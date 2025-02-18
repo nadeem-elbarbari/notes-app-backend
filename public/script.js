@@ -16,13 +16,16 @@ $('#closeSidebar').click(() => $('#sidebar').removeClass('open'));
 const token = localStorage.getItem('token');
 const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
+let notValid = null;
+
 fetch('https://notes-app-fullstack-psi.vercel.app//api/v1/dashboard', { headers })
     .then((res) => res.json())
     .then((data) => {
         if (!data.success) {
-            localStorage.removeItem('token');
-            window.location.href = 'login.html';
+            notValid = true;
+            logOut();
         } else {
+            notValid = false;
             $('#dashboard-title').text(`What is in your mind, ${data.data.name.split(' ')[0]}?`);
         }
     })
@@ -74,8 +77,6 @@ entriesContainer.addEventListener('click', async (e) => {
     const noteId = entryCard.dataset.id;
 
     if (e.target.classList.contains('delete')) {
-        console.log(`Deleting Note ID: ${noteId}`);
-
         await deleteNote(noteId);
         getNotes(); // Refresh list after deletion
     }
@@ -114,11 +115,19 @@ document.getElementById('crudForm').addEventListener('submit', async (e) => {
     const description = document.getElementById('description').value;
 
     if (title.length < 3 || description.length < 3) {
-        showToast('Title and description must be at least 3 characters long');
+        showAlert('Title and description must be at least 3 characters long');
         return;
     }
     if (title.length > 10 || description.length > 100) {
-        showToast('Title max 10 chars, description max 100 chars');
+        showAlert('Title max 10 chars, description max 100 chars');
+        return;
+    }
+
+    if (!notValid) {
+        showAlert('You are not authorized to perform this action');
+        setTimeout(() => {
+            logOut();
+        }, 3000);
         return;
     }
 
@@ -133,17 +142,25 @@ document.getElementById('updateButton').addEventListener('click', async () => {
     const description = document.getElementById('description').value;
 
     if (!editNoteId) {
-        showToast('No note selected for update');
+        showAlert('No note selected for update');
         return;
     }
 
     if (title.length < 3 || description.length < 3) {
-        showToast('Title and description must be at least 3 characters long');
+        showAlert('Title and description must be at least 3 characters long');
         return;
     }
 
     if (title.length > 10 || description.length > 100) {
-        showToast('Title max 10 chars, description max 100 chars');
+        showAlert('Title max 10 chars, description max 100 chars');
+        return;
+    }
+
+    if (!notValid) {
+        showAlert('You are not authorized to perform this action');
+        setTimeout(() => {
+            logOut();
+        }, 3000);
         return;
     }
 
@@ -155,6 +172,14 @@ document.getElementById('updateButton').addEventListener('click', async () => {
     editNoteId = null; // Reset after update
 });
 const deleteNote = async (noteId) => {
+    if (!notValid) {
+        showAlert('You are not authorized to perform this action');
+        setTimeout(() => {
+            logOut();
+        }, 3000);
+        return;
+    }
+
     try {
         const response = await fetch(`https://notes-app-fullstack-psi.vercel.app//api/v1/notes/delete/${noteId}`, {
             method: 'DELETE',
@@ -198,9 +223,7 @@ const updateNote = async (noteId, title, description) => {
 };
 
 $('#logoutButton, #sidebar-logoutButton').click(() => {
-    localStorage.removeItem('token');
-    window.location.href = '/';
-    console.log('Logged out');
+    logOut();
 });
 
 // Helper function for alerts
@@ -220,4 +243,10 @@ function showToast(message, type = 'error') {
         toast.classList.add('fade-out');
         toast.addEventListener('transitionend', () => toast.remove());
     }, 3000);
+}
+
+function logOut() {
+    localStorage.removeItem('token');
+    window.location.href = '/';
+    console.log('Logged out');
 }
