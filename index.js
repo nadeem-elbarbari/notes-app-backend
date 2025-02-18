@@ -2,7 +2,6 @@ import express from 'express';
 import { PORT } from './config/env.js';
 import { appController } from './controllers/app.controller.js';
 import cors from 'cors';
-import path from 'path';
 import { fileURLToPath } from 'url';
 import path from 'path';
 
