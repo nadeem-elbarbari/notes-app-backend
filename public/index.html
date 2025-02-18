@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sticky Notes</title>
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    </head>
+    <body id="index-body">
+        <!-- navbar -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="/" class="logo">Notes</a>
+                <button class="hamburger" id="menuToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <ul class="nav-links" id="navMenu">
+                    <li id="home"><a href="/">Home</a></li>
+                    <li id="register"><a href="register.html">Register</a></li>
+                    <li id="login"><a href="login.html">Login</a></li>
+                    <li id="dashboard"><a href="dashboard.html">Dashboard</a></li>
+                </ul>
+            </div>
+            <!-- sidebar nav -->
+            <div class="sidebar" id="sidebar">
+                <ul class="sidebar-nav">
+                    <li id="sidebar-home"><a href="/">Home</a></li>
+                    <li id="sidebar-register"><a href="register.html">Register</a></li>
+                    <li id="sidebar-login"><a href="login.html">Login</a></li>
+                    <li id="sidebar-dashboard"><a href="dashboard.html">Dashboard</a></li>
+                    <button id="logoutButton">Logout</button>
+                    <button id="closeSidebar"><i class="fa-regular fa-circle-xmark"></i></button>
+                </ul>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1 class="hero-title">Save Your Notes, Today</h1>
+                <p class="hero-subtitle">Take notes and stay organized.</p>
+                <a href="register.html" class="hero-button">Get Started</a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-container">
+                <p>
+                    &copy; <span id="currentYear"></span> Notes. Made with <i class="fa-solid fa-heart fa-beat" style="color: red;"></i> by
+                    <a href="https://github.com/nadeem-elbarbari">NadeeM</a>.
+                </p>
+            </div>
+        </footer>
+
+        <script>
+            document.getElementById('currentYear').textContent = new Date().getFullYear();
+        </script>
+        <script src="index.js"></script>
+    </body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Login</title>
+        <link rel="stylesheet" href="styles.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="/" class="logo">Notes</a>
+                <button class="hamburger" id="menuToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <ul class="nav-links" id="navMenu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="register.html">Register</a></li>
+                </ul>
+            </div>
+            <!-- sidebar nav -->
+            <div class="sidebar" id="sidebar">
+                <ul class="sidebar-nav">
+                    <li id="sidebar-home"><a href="/">Home</a></li>
+                    <li id="sidebar-register"><a href="register.html">Register</a></li>
+                    <li id="sidebar-login"><a href="login.html">Login</a></li>
+                    <li id="sidebar-dashboard"><a href="dashboard.html">Dashboard</a></li>
+                    <button id="logoutButton">Logout</button>
+                    <button id="closeSidebar"><i class="fa-regular fa-circle-xmark"></i></button>
+                </ul>
+            </div>
+        </nav>
+        <div class="auth-container">
+            <form class="auth-form">
+                <h2>Login</h2>
+
+                <input id="email" type="email" placeholder="Email" required />
+                <input id="password" type="password" placeholder="Password" required />
+
+                <button type="submit">Login</button>
+                <p class="login-link">Don't have an account? <a href="register.html">Register</a></p>
+            </form>
+        </div>
+                <!-- Toast container for alerts -->
+        <div id="toast-container" class="toast-container"></div>
+
+        <script src="login.js"></script>
+    </body>
+</html>

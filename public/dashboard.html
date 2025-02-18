@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="styles.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/js/all.min.js"></script>
+        <title>Dashboard</title>
+    </head>
+    <body style="padding-top: 60px">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="/" class="logo">Notes</a>
+                <button class="hamburger" id="menuToggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <ul class="nav-links" id="navMenu">
+                    <button id="logoutButton">Logout</button>
+                </ul>
+            </div>
+            <!-- sidebar nav -->
+            <div class="sidebar" id="sidebar">
+                <ul class="sidebar-nav">
+                    <li id="sidebar-home"><a href="/">Home</a></li>
+                    <li id="sidebar-register"><a href="register.html">Register</a></li>
+                    <li id="sidebar-login"><a href="login.html">Login</a></li>
+                    <li id="sidebar-dashboard"><a href="dashboard.html">Dashboard</a></li>
+                    <button id="sidebar-logoutButton">Logout</button>
+                    <button id="closeSidebar"><i class="fa-regular fa-circle-xmark"></i></button>
+                </ul>
+            </div>
+        </nav>
+
+        <div class="container">
+            <h1 id="dashboard-title">Dashboard</h1>
+            <form id="crudForm">
+                <input type="text" id="title" placeholder="Title" required />
+                <textarea id="description" placeholder="Description" required></textarea>
+                <button type="submit" id="addButton">Add Entry</button>
+                <button type="button" id="updateButton">Update</button>
+            </form>
+
+            <h3 class="empty-notes">You don't have notes yet!</h3>
+            <div id="entries" class="entries-grid"></div>
+        </div>
+
+        <!-- Toast container for alerts -->
+        <div id="toast-container" class="toast-container"></div>
+
+        <script src="script.js"></script>
+    </body>
+</html>
