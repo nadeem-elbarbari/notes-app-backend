@@ -28,7 +28,7 @@ $('.auth-form').submit(async (e) => {
     const password = $('#password').val();
 
     try {
-        const response = await fetch('https://notes-app-pi-ecru.vercel.app/api/v1/login', {
+        const response = await fetch('https://notes-app-fullstack-psi.vercel.app//api/v1/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

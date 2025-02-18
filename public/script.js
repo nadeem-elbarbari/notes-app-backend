@@ -16,7 +16,7 @@ $('#closeSidebar').click(() => $('#sidebar').removeClass('open'));
 const token = localStorage.getItem('token');
 const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
-fetch('https://notes-app-pi-ecru.vercel.app/api/v1/dashboard', { headers })
+fetch('https://notes-app-fullstack-psi.vercel.app//api/v1/dashboard', { headers })
     .then((res) => res.json())
     .then((data) => {
         if (!data.success) {
@@ -32,7 +32,7 @@ const entriesContainer = document.getElementById('entries');
 
 const getNotes = async () => {
     try {
-        const response = await fetch('https://notes-app-pi-ecru.vercel.app/api/v1/notes', { headers });
+        const response = await fetch('https://notes-app-fullstack-psi.vercel.app//api/v1/notes', { headers });
         const data = await response.json();
 
         if (data.success) {
@@ -91,7 +91,7 @@ entriesContainer.addEventListener('click', async (e) => {
 
 const addNote = async (title, description) => {
     try {
-        const response = await fetch('https://notes-app-pi-ecru.vercel.app/api/v1/notes/create', {
+        const response = await fetch('https://notes-app-fullstack-psi.vercel.app//api/v1/notes/create', {
             headers,
             method: 'POST',
             body: JSON.stringify({ title, description }),
@@ -156,7 +156,7 @@ document.getElementById('updateButton').addEventListener('click', async () => {
 });
 const deleteNote = async (noteId) => {
     try {
-        const response = await fetch(`https://notes-app-pi-ecru.vercel.app/api/v1/notes/delete/${noteId}`, {
+        const response = await fetch(`https://notes-app-fullstack-psi.vercel.app//api/v1/notes/delete/${noteId}`, {
             method: 'DELETE',
             headers,
         });
@@ -175,7 +175,7 @@ const deleteNote = async (noteId) => {
 
 const updateNote = async (noteId, title, description) => {
     try {
-        const response = await fetch(`https://notes-app-pi-ecru.vercel.app/api/v1/notes/update/${noteId}`, {
+        const response = await fetch(`https://notes-app-fullstack-psi.vercel.app//api/v1/notes/update/${noteId}`, {
             method: 'PATCH',
             headers,
             body: JSON.stringify({ title, description }),

@@ -45,7 +45,7 @@ $('.auth-form').submit(async (e) => {
     }
 
     try {
-        const response = await fetch('https://notes-app-pi-ecru.vercel.app/api/v1/signup', {
+        const response = await fetch('https://notes-app-fullstack-psi.vercel.app//api/v1/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
