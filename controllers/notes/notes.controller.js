@@ -1,0 +1,11 @@
+import { Router } from "express";
+import * as service from "./notes.service.js";
+import { authenticate } from "../../middleware/auth/auth.middleware.js";
+import * as validate from "../../utils/validation/notes.schema.js";
+import { validation } from "../../middleware/validation/validate.middleware.js";
+const router = Router();
+router.get("/notes/", authenticate, service.getNotes);
+router.post("/notes/create", authenticate, validation(validate.createNoteSchema), service.createNote);
+router.patch('/notes/update/:noteId', authenticate, validation(validate.updateNoteSchema), service.updateNote);
+router.delete('/notes/delete/:noteId', authenticate, service.deleteNote);
+export default router;

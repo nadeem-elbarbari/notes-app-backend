@@ -1,0 +1,10 @@
+import { Router } from 'express';
+import * as userService from './user.service.js';
+import { validation } from '../../middleware/validation/validate.middleware.js';
+import * as validate from '../../utils/validation/auth.schema.js';
+import { authenticate } from '../../middleware/auth/auth.middleware.js';
+const router = Router();
+router.post('/signup', validation(validate.signupSchema), userService.signup);
+router.post('/login', validation(validate.signinSchema), userService.signin);
+router.get('/dashboard', authenticate, userService.dashboard);
+export default router;
