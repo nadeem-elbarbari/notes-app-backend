@@ -1,6 +1,7 @@
 import express from 'express';
 import { PORT } from './config/env.js';
 import { appController } from './controllers/app.controller.js';
+import path from 'path';
 import cors from 'cors';
 const app = express();
 app.use(
@@ -11,6 +12,12 @@ app.use(
         credentials: true,
     })
 );
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
 
 appController(app, express);
 
