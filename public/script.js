@@ -124,7 +124,7 @@ document.getElementById('crudForm').addEventListener('submit', async (e) => {
     }
 
     if (!notValid) {
-        showAlert('You are not authorized to perform this action');
+        showAlert('Your session has expired. Please log in again');
         setTimeout(() => {
             logOut();
         }, 3000);
@@ -157,7 +157,7 @@ document.getElementById('updateButton').addEventListener('click', async () => {
     }
 
     if (!notValid) {
-        showAlert('You are not authorized to perform this action');
+        showAlert('Your session has expired. Please log in again');
         setTimeout(() => {
             logOut();
         }, 3000);
@@ -173,7 +173,7 @@ document.getElementById('updateButton').addEventListener('click', async () => {
 });
 const deleteNote = async (noteId) => {
     if (!notValid) {
-        showAlert('You are not authorized to perform this action');
+        showAlert('Your session has expired. Please log in again');
         setTimeout(() => {
             logOut();
         }, 3000);
