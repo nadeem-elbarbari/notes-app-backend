@@ -3,6 +3,16 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="Sticky Notes is a simple note-taking app that allows you to take notes and stay organized."
+        />
+        <meta
+            name="keywords"
+            content="notes, sticky notes, note-taking, note-taking app, notes app, sticky notes app"
+        />
+        <meta name="author" content="Nadeem Elbarbari" />
+        <link rel="icon" type="image/x-icon" href="favicon.ico" />
         <title>Sticky Notes</title>
         <link rel="stylesheet" href="styles.css" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
@@ -50,7 +60,8 @@
         <footer class="footer">
             <div class="footer-container">
                 <p>
-                    &copy; <span id="currentYear"></span> Notes. Made with <i class="fa-solid fa-heart fa-beat" style="color: red;"></i> by
+                    &copy; <span id="currentYear"></span> Notes. Made with
+                    <i class="fa-solid fa-heart fa-beat" style="color: red"></i> by
                     <a href="https://github.com/nadeem-elbarbari">NadeeM</a>.
                 </p>
             </div>
@@ -59,6 +70,6 @@
         <script>
             document.getElementById('currentYear').textContent = new Date().getFullYear();
         </script>
-        <script  src="index.js"></script>
+        <script src="index.js"></script>
     </body>
 </html>
