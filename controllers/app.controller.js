@@ -26,7 +26,7 @@ export function appController(app, express) {
                 httpOnly: true, // Makes the cookie inaccessible to JavaScript (important for security)
                 secure: process.env.NODE_ENV === 'production', // Set to `true` in production for HTTPS (encrypted cookie)
                 maxAge: 24 * 60 * 60 * 1000, // Set the cookie's expiration time (in milliseconds)
-                sameSite: 'strict', // Controls cross-site cookie behavior (important for CSRF protection)
+                sameSite: 'lax', // Controls cross-site cookie behavior (important for CSRF protection)
             },
         })
     );
