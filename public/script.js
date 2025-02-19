@@ -8,7 +8,7 @@ if (localStorage.getItem('token') && window.location.pathname === '/dashboard.ht
     $('#sidebar-register, #sidebar-login, #sidebar-dashboard').hide();
     $('#sidebar-home, #logoutButton').show();
 }
-export const req = async (endpoint, method, body = null) => {
+const req = async (endpoint, method, body = null) => {
     const url = 'https://notes-app-fullstack-psi.vercel.app';
     try {
         const response = await fetch(`${url}/api/v1/${endpoint}`, {
@@ -84,18 +84,7 @@ const getNotes = async () => {
         console.error('Error fetching notes:', error);
     }
 };
-const req = async (url, method, body) => {
-    const token = localStorage.getItem('token');
-    const response = await fetch(url, {
-        headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-        },
-        method: method,
-        body: body,
-    });
-    return response;
-};
+
 // Add a new note
 const addNote = async (title, description) => {
     try {
