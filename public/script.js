@@ -1,51 +1,46 @@
+// Redirect to login if no token and on dashboard page
 if (!localStorage.getItem('token') && window.location.pathname === '/dashboard.html') {
     window.location.href = 'login.html';
 }
 
+// Show/hide sidebar elements based on token presence
 if (localStorage.getItem('token') && window.location.pathname === '/dashboard.html') {
-    $('#sidebar-register').hide();
-    $('#sidebar-login').hide();
-    $('#sidebar-dashboard').hide();
-    $('#sidebar-home').show();
-    $('#logoutButton').show();
+    $('#sidebar-register, #sidebar-login, #sidebar-dashboard').hide();
+    $('#sidebar-home, #logoutButton').show();
 }
 
+// Sidebar toggle functionality
 $('#menuToggle').click(() => $('#sidebar').addClass('open'));
 $('#closeSidebar').click(() => $('#sidebar').removeClass('open'));
 
 const token = localStorage.getItem('token');
 const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
+// Check token validity
 const checkToken = async () => {
     try {
-        const response = await fetch('https://notes-app-fullstack-psi.vercel.app/api/v1/auth/checktoken', {
-            headers,
-        });
+        const response = await fetch('https://notes-app-fullstack-psi.vercel.app/api/v1/auth/checktoken', { headers });
         const data = await response.json();
-        if (data.success) {
-            console.log('Token is valid');
-            return true;
-        }
-        if (!data.success) {
-            console.log('Token is invalid');
-            return false;
-        }
+        return data.success;
     } catch (error) {
-        console.log(error);
+        console.error('Error checking token:', error);
+        return false;
     }
 };
 
-if (checkToken()) {
-    console.log('Token is valid');
-} else {
-    showAlert('Your session has expired. Please log in again');
-    setTimeout(() => {
-        logOut();
-    }, 3000);
-}
+// Validate token and handle session expiration
+const validateToken = async () => {
+    const isValid = await checkToken();
+    if (!isValid) {
+        showAlert('Your session has expired. Please log in again');
+        setTimeout(logOut, 3000);
+    }
+    return isValid;
+};
 
 const entriesContainer = document.getElementById('entries');
 
+// Fetch and display notes
 const getNotes = async () => {
     try {
         const response = await fetch('https://notes-app-fullstack-psi.vercel.app/api/v1/notes', { headers });
@@ -54,14 +49,12 @@ const getNotes = async () => {
         if (data.success) {
             entriesContainer.innerHTML = ''; // Clear previous entries
             const notes = data.data;
-
             document.querySelector('.empty-notes').style.display = notes.length === 0 ? 'block' : 'none';
 
             notes.forEach((note) => {
                 const entryCard = document.createElement('div');
                 entryCard.classList.add('entry-card');
                 entryCard.dataset.id = note._id;
-
                 entryCard.innerHTML = `
                     <h3>${note.title}</h3>
                     <p>${note.description}</p>
@@ -74,12 +67,67 @@ const getNotes = async () => {
             });
         }
     } catch (error) {
-        console.log(error);
+        console.error('Error fetching notes:', error);
     }
 };
 
-// Fetch and display notes
-getNotes();
+// Add a new note
+const addNote = async (title, description) => {
+    try {
+        const response = await fetch('https://notes-app-fullstack-psi.vercel.app/api/v1/notes/create', {
+            headers,
+            method: 'POST',
+            body: JSON.stringify({ title, description }),
+        });
+        const data = await response.json();
+        if (data.success) {
+            await getNotes(); // Refresh list after adding
+            showToast('Note added successfully', 'success');
+        }
+    } catch (error) {
+        console.error('Error adding note:', error);
+    }
+};
+
+// Update an existing note
+const updateNote = async (noteId, title, description) => {
+    try {
+        const response = await fetch(`https://notes-app-fullstack-psi.vercel.app/api/v1/notes/update/${noteId}`, {
+            method: 'PATCH',
+            headers,
+            body: JSON.stringify({ title, description }),
+        });
+        const data = await response.json();
+        if (data.success) {
+            await getNotes(); // Refresh list after update
+            showToast('Note updated successfully', 'success');
+        } else {
+            console.error('Error updating note:', data.message);
+        }
+    } catch (error) {
+        console.error('Error updating note:', error);
+    }
+};
+
+// Delete a note
+const deleteNote = async (noteId) => {
+    if (!(await validateToken())) return;
+
+    try {
+        const response = await fetch(`https://notes-app-fullstack-psi.vercel.app/api/v1/notes/delete/${noteId}`, {
+            method: 'DELETE',
+            headers,
+        });
+        const data = await response.json();
+        if (data.success) {
+            showToast('Note deleted successfully', 'success');
+        } else {
+            console.error('Error deleting note:', data.message);
+        }
+    } catch (error) {
+        console.error('Error deleting note:', error);
+    }
+};
 
 // Event delegation for delete & edit buttons
 let editNoteId = null;
@@ -103,24 +151,7 @@ entriesContainer.addEventListener('click', async (e) => {
     }
 });
 
-const addNote = async (title, description) => {
-    try {
-        const response = await fetch('https://notes-app-fullstack-psi.vercel.app/api/v1/notes/create', {
-            headers,
-            method: 'POST',
-            body: JSON.stringify({ title, description }),
-        });
-
-        const data = await response.json();
-        if (data.success) {
-            await getNotes(); // Refresh list after adding
-            showToast('Note added successfully', 'success');
-        }
-    } catch (error) {
-        console.log(error);
-    }
-};
-
+// Handle form submission for adding/updating notes
 document.getElementById('crudForm').addEventListener('submit', async (e) => {
     e.preventDefault();
 
@@ -136,20 +167,21 @@ document.getElementById('crudForm').addEventListener('submit', async (e) => {
         return;
     }
 
-    if (!checkToken()) {
-        showAlert('Your session has expired. Please log in again');
-        setTimeout(() => {
-            logOut();
-        }, 3000);
-        return;
+    if (!(await validateToken())) return;
+
+    if (editNoteId) {
+        await updateNote(editNoteId, title, description);
+        editNoteId = null;
+    } else {
+        await addNote(title, description);
     }
 
-    await addNote(title, description);
     document.getElementById('addButton').style.display = 'block';
     document.getElementById('updateButton').style.display = 'none';
     e.target.reset();
 });
 
+// Handle update button click
 document.getElementById('updateButton').addEventListener('click', async () => {
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
@@ -169,13 +201,7 @@ document.getElementById('updateButton').addEventListener('click', async () => {
         return;
     }
 
-    if (!isValid) {
-        showAlert('Your session has expired. Please log in again');
-        setTimeout(() => {
-            logOut();
-        }, 3000);
-        return;
-    }
+    if (!(await validateToken())) return;
 
     await updateNote(editNoteId, title, description);
 
@@ -184,66 +210,16 @@ document.getElementById('updateButton').addEventListener('click', async () => {
     document.getElementById('crudForm').reset();
     editNoteId = null; // Reset after update
 });
-const deleteNote = async (noteId) => {
-    if (!isValid) {
-        showAlert('Your session has expired. Please log in again');
-        setTimeout(() => {
-            logOut();
-        }, 3000);
-        return;
-    }
 
-    try {
-        const response = await fetch(`https://notes-app-fullstack-psi.vercel.app/api/v1/notes/delete/${noteId}`, {
-            method: 'DELETE',
-            headers,
-        });
-
-        const data = await response.json();
-        if (data.success) {
-            console.log(`Note ${noteId} deleted`);
-            showToast('Note deleted successfully', 'success');
-        } else {
-            console.error(data.message);
-        }
-    } catch (error) {
-        console.error('Error deleting note:', error);
-    }
-};
-
-const updateNote = async (noteId, title, description) => {
-    try {
-        const response = await fetch(`https://notes-app-fullstack-psi.vercel.app/api/v1/notes/update/${noteId}`, {
-            method: 'PATCH',
-            headers,
-            body: JSON.stringify({ title, description }),
-        });
-
-        const data = await response.json();
-        console.log(data);
-
-        if (data.success) {
-            console.log(`Note ${noteId} updated ` + data.message);
-            await getNotes(); // Refresh list after update
-            showToast('Note updated successfully', 'success');
-        }
-        if (!data.success) {
-            console.error(data.message);
-        }
-    } catch (error) {
-        console.error('Error updating note:', error);
-    }
-};
-
-$('#logoutButton, #sidebar-logoutButton').click(() => {
-    logOut();
-});
+// Logout functionality
+$('#logoutButton, #sidebar-logoutButton').click(logOut);
 
 // Helper function for alerts
 function showAlert(message) {
     showToast(message);
 }
 
+// Helper function for toasts
 function showToast(message, type = 'error') {
     const toastContainer = document.getElementById('toast-container');
     const toast = document.createElement('div');
@@ -258,8 +234,16 @@ function showToast(message, type = 'error') {
     }, 3000);
 }
 
+// Logout function
 function logOut() {
     localStorage.removeItem('token');
     window.location.href = '/';
     console.log('Logged out');
 }
+
+// Initial token validation and notes fetching
+(async () => {
+    if (await validateToken()) {
+        await getNotes();
+    }
+})();
