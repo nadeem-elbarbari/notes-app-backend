@@ -2,7 +2,6 @@
 const params = new URLSearchParams(window.location.search);
 const token = params.get('token');
 
-
 if (token) {
     localStorage.setItem('token', token);
     window.history.replaceState({}, document.title, window.location.pathname);
@@ -19,7 +18,7 @@ if ((localStorage.getItem('token') || token) && window.location.pathname === '/d
 }
 
 const req = async (endpoint, method, body = null) => {
-    const url = 'https://notes-app-fullstack-psi.vercel.app';
+    const url = 'https://notes-app-fullstack-wheat.vercel.app';
     try {
         const response = await fetch(`${url}/api/v1/${endpoint}`, {
             method,
@@ -45,7 +44,7 @@ const checkToken = async () => {
         const response = await req('auth/checktoken', 'GET');
         const data = await response.json();
         console.log('data :', data);
-        
+
         $('#dashboard-title').text(`Welcome, ${data.data.name}`);
         return data.success;
     } catch (error) {

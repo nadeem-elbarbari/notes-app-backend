@@ -14,7 +14,7 @@ export const xAuth = async (req, res, next) => {
 
         if (user) {
             return res.redirect(
-                `https://notes-app-fullstack-psi.vercel.app/dashboard.html?token=${signToken(user._id)}`
+                `https://notes-app-fullstack-wheat.vercel.app/dashboard.html?token=${signToken(user._id)}`
             );
         }
 
@@ -27,7 +27,7 @@ export const xAuth = async (req, res, next) => {
         });
 
         return res.redirect(
-            `https://notes-app-fullstack-psi.vercel.app/dashboard.html?token=${signToken(userCreated._id)}`
+            `https://notes-app-fullstack-wheat.vercel.app/dashboard.html?token=${signToken(userCreated._id)}`
         );
     } catch (error) {
         next(error);

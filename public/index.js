@@ -52,13 +52,13 @@ $('#logoutButton').click(() => {
 
 $('#dashboard').click(async () => {
     try {
-        const url = 'https://notes-app-fullstack-psi.vercel.app';
+        const url = 'https://notes-app-fullstack-wheat.vercel.app';
         const response = await fetch(`${url}/api/v1/auth/checktoken`, {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
-        }); 
+        });
         const data = await response.json();
         if (!data.success) {
             localStorage.removeItem('token');
