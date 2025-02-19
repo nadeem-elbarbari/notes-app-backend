@@ -91,6 +91,8 @@ const addNote = async (title, description) => {
 
 // Update an existing note
 const updateNote = async (noteId, title, description) => {
+    if (!(await validateToken())) return;
+
     try {
         const response = await fetch(`https://notes-app-fullstack-psi.vercel.app/api/v1/notes/update/${noteId}`, {
             method: 'PATCH',
