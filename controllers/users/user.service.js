@@ -23,6 +23,6 @@ export const signin = async (req, res, next) => {
     const token = signToken(user._id);
     return res.success({ user, token }, 'Logged in successfully', 200);
 };
-export const dashboard = async (req, res, next) => {
-    return res.success(req.user, 'Dashboard', 200);
+export const checkToken = async (req, res, next) => {
+    return res.success(req.user, 'Token is valid', 200);
 };

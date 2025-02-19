@@ -6,5 +6,5 @@ import { authenticate } from '../../middleware/auth/auth.middleware.js';
 const router = Router();
 router.post('/signup', validation(validate.signupSchema), userService.signup);
 router.post('/login', validation(validate.signinSchema), userService.signin);
-router.get('/dashboard', authenticate, userService.dashboard);
+router.get('/checktoken', authenticate, userService.checkToken);
 export default router;
