@@ -1,4 +1,4 @@
-import { req, validateToken } from "./auth.js";
+import { req, validateToken } from './auth.js';
 
 // Redirect to login if no token and on dashboard page
 const token = localStorage.getItem('token');
@@ -76,21 +76,22 @@ const deleteNote = async (noteId) =>
     handleNoteOperation(`notes/delete/${noteId}`, 'DELETE', null, 'Note deleted successfully');
 
 let editNoteId = null;
-entriesContainer.addEventListener('click', async (e) => {
-    const entryCard = e.target.closest('.entry-card');
-    if (!entryCard) return;
+entriesContainer &&
+    entriesContainer.addEventListener('click', async (e) => {
+        const entryCard = e.target.closest('.entry-card');
+        if (!entryCard) return;
 
-    const noteId = entryCard.dataset.id;
-    if (e.target.classList.contains('delete')) await deleteNote(noteId);
+        const noteId = entryCard.dataset.id;
+        if (e.target.classList.contains('delete')) await deleteNote(noteId);
 
-    if (e.target.classList.contains('edit')) {
-        document.getElementById('title').value = entryCard.querySelector('h3').textContent;
-        document.getElementById('description').value = entryCard.querySelector('p').textContent;
-        $('#updateButton').show();
-        $('#addButton').hide();
-        editNoteId = noteId;
-    }
-});
+        if (e.target.classList.contains('edit')) {
+            document.getElementById('title').value = entryCard.querySelector('h3').textContent;
+            document.getElementById('description').value = entryCard.querySelector('p').textContent;
+            $('#updateButton').show();
+            $('#addButton').hide();
+            editNoteId = noteId;
+        }
+    });
 
 document.getElementById('crudForm').addEventListener('submit', async (e) => {
     e.preventDefault();
