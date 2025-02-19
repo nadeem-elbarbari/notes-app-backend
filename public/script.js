@@ -18,7 +18,7 @@ if ((localStorage.getItem('token') || token) && window.location.pathname === '/d
 }
 
 const req = async (endpoint, method, body = null) => {
-    const url = 'https://notes-app-fullstack-wheat.vercel.app';
+    const url = 'https://notes-app-fullstack-rp7n.onrender.com';
     try {
         const response = await fetch(`${url}/api/v1/${endpoint}`, {
             method,
