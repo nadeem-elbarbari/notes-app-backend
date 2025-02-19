@@ -8,6 +8,7 @@ if (localStorage.getItem('token') && window.location.pathname === '/dashboard.ht
     $('#sidebar-register, #sidebar-login, #sidebar-dashboard').hide();
     $('#sidebar-home, #logoutButton').show();
 }
+
 const req = async (endpoint, method, body = null) => {
     const url = 'https://notes-app-fullstack-psi.vercel.app';
     try {
@@ -24,6 +25,7 @@ const req = async (endpoint, method, body = null) => {
         console.error('Request error:', error);
     }
 };
+
 // Sidebar toggle functionality
 $('#menuToggle').click(() => $('#sidebar').addClass('open'));
 $('#closeSidebar').click(() => $('#sidebar').removeClass('open'));
@@ -88,11 +90,7 @@ const getNotes = async () => {
 // Add a new note
 const addNote = async (title, description) => {
     try {
-        const response = await req(
-            'notes/create',
-            'POST',
-            JSON.stringify({ title, description })
-        );
+        const response = await req('notes/create', 'POST', { title, description });
         const data = await response.json();
         if (data.success) {
             await getNotes(); // Refresh list after adding
@@ -108,11 +106,7 @@ const updateNote = async (noteId, title, description) => {
     if (!(await validateToken())) return;
 
     try {
-        const response = await req(
-            `notes/update/${noteId}`,
-            'PATCH',
-            JSON.stringify({ title, description })
-        );
+        const response = await req(`notes/update/${noteId}`, 'PATCH', { title, description });
         const data = await response.json();
         if (data.success) {
             await getNotes(); // Refresh list after update
@@ -129,10 +123,20 @@ const updateNote = async (noteId, title, description) => {
 const deleteNote = async (noteId) => {
     if (!(await validateToken())) {
         return console.log('Token invalid');
-    } else {
     }
 
-    console.log(await validateToken());
+    try {
+        const response = await req(`notes/delete/${noteId}`, 'DELETE');
+        const data = await response.json();
+        if (data.success) {
+            await getNotes(); // Refresh list after deletion
+            showToast('Note deleted successfully', 'success');
+        } else {
+            console.error('Error deleting note:', data.message);
+        }
+    } catch (error) {
+        console.error('Error deleting note:', error);
+    }
 };
 
 // Event delegation for delete & edit buttons
@@ -145,7 +149,6 @@ entriesContainer.addEventListener('click', async (e) => {
 
     if (e.target.classList.contains('delete')) {
         await deleteNote(noteId);
-        getNotes(); // Refresh list after deletion
     }
 
     if (e.target.classList.contains('edit')) {
@@ -173,16 +176,12 @@ document.getElementById('crudForm').addEventListener('submit', async (e) => {
         return;
     }
 
-    if (!(await validateToken())) {
-        return;
-    }
+    if (!(await validateToken())) return;
 
     if (editNoteId) {
         await updateNote(editNoteId, title, description);
         editNoteId = null;
     } else {
-        console.log(title, description);
-
         await addNote(title, description);
     }
 
@@ -238,10 +237,11 @@ function showToast(message, type = 'error') {
 
     toastContainer.appendChild(toast);
 
-    setTimeout(() => {
-        toast.classList.add('fade-out');
-        toast.addEventListener('transitionend', () => toast.remove());
-    }, 3000);
+   setTimeout(() => {
+       toast.classList.add('fade-out');
+       toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+   }, 3000);
+
 }
 
 // Logout function
