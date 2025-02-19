@@ -16,24 +16,28 @@ $('#closeSidebar').click(() => $('#sidebar').removeClass('open'));
 const token = localStorage.getItem('token');
 const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
-let isValid = null;
-
 const checkToken = async () => {
     try {
         const response = await fetch('https://notes-app-fullstack-psi.vercel.app//api/v1/auth/checktoken', {
             headers,
         });
         const data = await response.json();
-        isValid = data.success;
-        return true;
+        if (data.success) {
+            console.log('Token is valid');
+            return true;
+        }
+        if (!data.success) {
+            console.log('Token is invalid');
+            return false;
+        }
     } catch (error) {
         console.log(error);
     }
 };
 
-checkToken();
-
-if (!isValid) {
+if (checkToken()) {
+    console.log('Token is valid');
+} else {
     showAlert('Your session has expired. Please log in again');
     setTimeout(() => {
         logOut();
