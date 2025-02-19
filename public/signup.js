@@ -1,5 +1,3 @@
-import { req } from "./auth.js";
-
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const pathname = window.location.pathname;
@@ -45,7 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await req('signup', 'POST', { name, email, password });
+            const url = 'https://notes-app-fullstack-psi.vercel.app';
+            const response = await fetch(`${url}/api/v1/signup`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password, confirmPassword }),
+            });
 
             const data = await response.json();
             if (!data.success) {

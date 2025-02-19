@@ -1,19 +1,4 @@
-export const req = async (endpoint, method, body = null) => {
-    const url = 'https://notes-app-fullstack-psi.vercel.app';
-    try {
-        const response = await fetch(`${url}/api/v1/${endpoint}`, {
-            method,
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json',
-            },
-            body: body ? JSON.stringify(body) : null,
-        });
-        return response;
-    } catch (error) {
-        console.error('Request error:', error);
-    }
-};
+
 
 const checkToken = async () => {
     try {
