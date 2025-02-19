@@ -1,3 +1,5 @@
+import { req, validateToken } from "./auth.js";
+
 // Redirect to login if no token and on dashboard page
 const token = localStorage.getItem('token');
 const isDashboard = window.location.pathname === '/dashboard.html';
@@ -129,7 +131,7 @@ document.getElementById('updateButton').addEventListener('click', async () => {
 
 $('#logoutButton, #sidebar-logoutButton').click(logOut);
 
-function showAlert(message) {
+export function showAlert(message) {
     showToast(message);
 }
 

@@ -1,3 +1,5 @@
+import { req } from "./auth.js";
+
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     const pathname = window.location.pathname;

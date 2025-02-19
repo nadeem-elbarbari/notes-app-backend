@@ -1,4 +1,4 @@
-const req = async (endpoint, method, body = null) => {
+export const req = async (endpoint, method, body = null) => {
     const url = 'https://notes-app-fullstack-psi.vercel.app';
     try {
         const response = await fetch(`${url}/api/v1/${endpoint}`, {
@@ -25,7 +25,7 @@ const checkToken = async () => {
     }
 };
 
-const validateToken = async () => {
+export const validateToken = async () => {
     const isValid = await checkToken();
     if (!isValid) {
         showAlert('Your session has expired. Please log in again');

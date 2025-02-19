@@ -1,3 +1,6 @@
+import { req } from './auth';
+import { showAlert } from './script';
+
 if (window.location.pathname === '/index.html') {
     window.location.href = '/';
 }
@@ -52,18 +55,16 @@ $('#logoutButton').click(() => {
 
 $('#dashboard').click(async () => {
     try {
-        const url = 'https://notes-app-fullstack-psi.vercel.app';
-        const response = await fetch(`${url}/api/v1/auth/checktoken`, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`,
-            },
-        }); 
-
+        const response = await req('auth/checktoken', 'GET');
         const data = await response.json();
-        if (!data.success) return showToast(data.message, 'error');
-        logOut();
+        if (!data.success) {
+            showAlert('Your session has expired. Please log in again');
+            setTimeout(() => {
+                localStorage.removeItem('token');
+                window.location.href = '/';
+            }, 3000);
+        }
     } catch (error) {
-        
+        console.error('Logout error:', error);
     }
 });
