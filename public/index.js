@@ -58,11 +58,8 @@ $('#dashboard').click(async () => {
         const response = await req('auth/checktoken', 'GET');
         const data = await response.json();
         if (!data.success) {
-            showAlert('Your session has expired. Please log in again');
-            setTimeout(() => {
-                localStorage.removeItem('token');
-                window.location.href = '/';
-            }, 3000);
+       console.log('Your session has expired. Please log in again');
+       
         }
     } catch (error) {
         console.error('Logout error:', error);
