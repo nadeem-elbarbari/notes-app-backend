@@ -31,6 +31,15 @@ const checkToken = async () => {
     }
 };
 
+checkToken();
+
+if (!isValid) {
+    showAlert('Your session has expired. Please log in again');
+    setTimeout(() => {
+        logOut();
+    }, 3000);
+}
+
 const entriesContainer = document.getElementById('entries');
 
 const getNotes = async () => {
