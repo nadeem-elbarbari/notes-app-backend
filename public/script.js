@@ -16,16 +16,16 @@ $('#closeSidebar').click(() => $('#sidebar').removeClass('open'));
 const token = localStorage.getItem('token');
 const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
-let notValid = null;
+let isValid = null;
 
 fetch('https://notes-app-fullstack-psi.vercel.app//api/v1/dashboard', { headers })
     .then((res) => res.json())
     .then((data) => {
         if (!data.success) {
-            notValid = true;
+            isValid = false;
             logOut();
         } else {
-            notValid = false;
+            isValid = true;
             $('#dashboard-title').text(`What is in your mind, ${data.data.name.split(' ')[0]}?`);
         }
     })
@@ -107,6 +107,7 @@ const addNote = async (title, description) => {
         console.log(error);
     }
 };
+console.log(isValid);
 
 document.getElementById('crudForm').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -123,7 +124,7 @@ document.getElementById('crudForm').addEventListener('submit', async (e) => {
         return;
     }
 
-    if (!notValid) {
+    if (!isValid) {
         showAlert('Your session has expired. Please log in again');
         setTimeout(() => {
             logOut();
@@ -156,7 +157,7 @@ document.getElementById('updateButton').addEventListener('click', async () => {
         return;
     }
 
-    if (!notValid) {
+    if (!isValid) {
         showAlert('Your session has expired. Please log in again');
         setTimeout(() => {
             logOut();
@@ -172,7 +173,7 @@ document.getElementById('updateButton').addEventListener('click', async () => {
     editNoteId = null; // Reset after update
 });
 const deleteNote = async (noteId) => {
-    if (!notValid) {
+    if (!isValid) {
         showAlert('Your session has expired. Please log in again');
         setTimeout(() => {
             logOut();
