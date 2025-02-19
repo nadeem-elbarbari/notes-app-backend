@@ -32,12 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const url = 'https://notes-app-fullstack-psi.vercel.app';
-            const response = await fetch(`${url}/api/v1/login`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
+            const response = await req('signin', 'POST', { email, password });
 
             const data = await response.json();
             if (!data.success) return showToast(data.message, 'error');

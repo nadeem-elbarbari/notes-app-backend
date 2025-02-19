@@ -43,12 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const url = 'https://notes-app-fullstack-psi.vercel.app';
-            const response = await fetch(`${url}/api/v1/signup`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, password, confirmPassword }),
-            });
+            const response = await req('signup', 'POST', { name, email, password });
 
             const data = await response.json();
             if (!data.success) {
