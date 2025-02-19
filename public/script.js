@@ -1,10 +1,19 @@
 // Redirect to login if no token and on dashboard page
+const params = new URLSearchParams(window.location.search);
+const token = params.get('token');
+
+
+if (token) {
+    localStorage.setItem('token', token);
+    window.history.replaceState({}, document.title, window.location.pathname);
+}
+
 if (!localStorage.getItem('token') && window.location.pathname === '/dashboard.html') {
-    window.location.href = 'login.html';
+    window.location.href = '/login.html';
 }
 
 // Show/hide sidebar elements based on token presence
-if (localStorage.getItem('token') && window.location.pathname === '/dashboard.html') {
+if ((localStorage.getItem('token') || token) && window.location.pathname === '/dashboard.html') {
     $('#sidebar-register, #sidebar-login, #sidebar-dashboard').hide();
     $('#sidebar-home, #logoutButton').show();
 }
@@ -35,6 +44,8 @@ const checkToken = async () => {
     try {
         const response = await req('auth/checktoken', 'GET');
         const data = await response.json();
+        console.log('data :', data);
+        
         $('#dashboard-title').text(`Welcome, ${data.data.name}`);
         return data.success;
     } catch (error) {
@@ -50,7 +61,7 @@ const validateToken = async () => {
 
     if (!isValid) {
         showAlert('Your session has expired. Please log in again');
-        setTimeout(logOut, 3000);
+        // setTimeout(logOut, 3000);
     }
     return isValid;
 };
@@ -238,11 +249,10 @@ function showToast(message, type = 'error') {
 
     toastContainer.appendChild(toast);
 
-   setTimeout(() => {
-       toast.classList.add('fade-out');
-       toast.addEventListener('transitionend', () => toast.remove(), { once: true });
-   }, 3000);
-
+    setTimeout(() => {
+        toast.classList.add('fade-out');
+        toast.addEventListener('transitionend', () => toast.remove(), { once: true });
+    }, 3000);
 }
 
 // Logout function

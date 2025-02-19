@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Optimized toast notification function
+// toast notification function
 const showToast = (message, type = 'error') => {
     const toastContainer = document.getElementById('toast-container');
     if (!toastContainer) return;
@@ -66,3 +66,9 @@ const showToast = (message, type = 'error') => {
         toast.addEventListener('transitionend', () => toast.remove(), { once: true });
     }, 3000);
 };
+
+// Login with Twitter
+$('#x-login').click(async (e) => {
+    e.preventDefault();
+    window.location.href = '/auth/twitter';
+});

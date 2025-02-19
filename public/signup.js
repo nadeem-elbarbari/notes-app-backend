@@ -79,3 +79,9 @@ const showToast = (message, type = 'error') => {
         toast.addEventListener('transitionend', () => toast.remove(), { once: true });
     }, 3000);
 };
+
+// Signup with Twitter
+$('#x-login').click(async (e) => {
+    e.preventDefault();
+    window.location.href = '/auth/twitter';
+});

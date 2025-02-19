@@ -2,8 +2,10 @@ import mongoose from 'mongoose';
 import { hash } from '../utils/bcrypt.js';
 var Source;
 (function (Source) {
-    Source["LOCAL"] = "local";
-    Source["GOOGLE"] = "google";
+    Source['LOCAL'] = 'local';
+    Source['GOOGLE'] = 'google';
+    Source['FACEBOOK'] = 'facebook';
+    Source['TWITTER'] = 'twitter';
 })(Source || (Source = {}));
 const UserSchema = new mongoose.Schema({
     name: {
@@ -12,7 +14,9 @@ const UserSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true,
+        required: function () {
+            return this.source.name === Source.LOCAL ? true : false;
+        },
         unique: true,
     },
     password: {
@@ -22,10 +26,15 @@ const UserSchema = new mongoose.Schema({
         },
     },
     source: {
-        type: String,
-        required: true,
-        enum: Object.values(Source),
-        default: Source.LOCAL,
+        name: {
+            type: String,
+            required: true,
+            enum: Object.values(Source),
+            default: Source.LOCAL,
+        },
+        id: {
+            type: String,
+        },
     },
 });
 UserSchema.pre('save', function (next) {
