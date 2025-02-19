@@ -35,6 +35,7 @@ const checkToken = async () => {
     try {
         const response = await req('auth/checktoken', 'GET');
         const data = await response.json();
+        $('#dashboard-title').text(`Welcome, ${data.data.name}`);
         return data.success;
     } catch (error) {
         console.error('Error checking token:', error);
