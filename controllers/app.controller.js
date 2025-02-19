@@ -23,8 +23,8 @@ export function appController(app, express) {
             resave: false, // Don't resave the session if it's not modified
             saveUninitialized: false, // Don't create a session if there's no data
             cookie: {
-                httpOnly: true, // Makes the cookie inaccessible to JavaScript (important for security)
-                secure: process.env.NODE_ENV === 'production', // Set to `true` in production for HTTPS (encrypted cookie)
+                httpOnly: false, // Makes the cookie inaccessible to JavaScript (important for security)
+                secure: false, // Set to `true` in production for HTTPS (encrypted cookie)
                 maxAge: 24 * 60 * 60 * 1000, // Set the cookie's expiration time (in milliseconds)
                 sameSite: 'lax', // Controls cross-site cookie behavior (important for CSRF protection)
             },
