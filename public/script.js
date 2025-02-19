@@ -18,18 +18,18 @@ const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${t
 
 let isValid = null;
 
-fetch('https://notes-app-fullstack-psi.vercel.app//api/v1/dashboard', { headers })
-    .then((res) => res.json())
-    .then((data) => {
-        if (!data.success) {
-            isValid = false;
-            logOut();
-        } else {
-            isValid = true;
-            $('#dashboard-title').text(`What is in your mind, ${data.data.name.split(' ')[0]}?`);
-        }
-    })
-    .catch(console.log);
+const checkToken = async () => {
+    try {
+        const response = await fetch('https://notes-app-fullstack-psi.vercel.app//api/v1/auth/checktoken', {
+            headers,
+        });
+        const data = await response.json();
+        isValid = data.success;
+        return true;
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 const entriesContainer = document.getElementById('entries');
 
@@ -124,7 +124,7 @@ document.getElementById('crudForm').addEventListener('submit', async (e) => {
         return;
     }
 
-    if (!isValid) {
+    if (!checkToken()) {
         showAlert('Your session has expired. Please log in again');
         setTimeout(() => {
             logOut();
