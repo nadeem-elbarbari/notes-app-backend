@@ -1,5 +1,5 @@
-import { req } from './auth';
-import { showAlert } from './script';
+import { req } from './auth.js';
+import { showAlert } from './script.js';
 
 if (window.location.pathname === '/index.html') {
     window.location.href = '/';
