@@ -49,3 +49,21 @@ $('#logoutButton').click(() => {
     localStorage.removeItem('token');
     window.location.href = '/';
 });
+
+$('#dashboard').click(async () => {
+    try {
+        const url = 'https://notes-app-fullstack-psi.vercel.app';
+        const response = await fetch(`${url}/api/v1/auth/checktoken`, {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        }); 
+
+        const data = await response.json();
+        if (!data.success) return showToast(data.message, 'error');
+        logOut();
+    } catch (error) {
+        
+    }
+});
