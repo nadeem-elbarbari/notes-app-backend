@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('https://notes-app-fullstack-rp7n.onrender.com/api/v1/login', {
+            const response = await fetch('https://notes-app-fullstack-wheat.vercel.app/api/v1/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),

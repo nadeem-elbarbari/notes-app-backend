@@ -14,7 +14,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(
     cors({
-        origin: ['http://localhost:5000', 'https://notes-app-fullstack-rp7n.onrender.com/'],
+        origin: ['http://localhost:5000', 'https://notes-app-fullstack-wheat.vercel.app/'],
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         allowedHeaders: ['Content-Type', 'Authorization'],
         credentials: true,

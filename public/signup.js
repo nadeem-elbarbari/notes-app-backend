@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const url = 'https://notes-app-fullstack-rp7n.onrender.com';
+            const url = 'https://notes-app-fullstack-wheat.vercel.app';
             const response = await fetch(`${url}/api/v1/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
