@@ -516,7 +516,7 @@ h1 {
 
 .toast-container {
     position: fixed;
-    bottom: 20px;
+    bottom: 20%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;

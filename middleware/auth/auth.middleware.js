@@ -8,6 +8,9 @@ export const authenticate = async (req, res, next) => {
     try {
         const token = req.headers.authorization;
         const [Bearer, tokenValue] = token?.split(' ') ?? [];
+        console.log('Bearer :', Bearer);
+        console.log('tokenValue :', tokenValue);
+        
         if (!tokenValue || Bearer !== 'Bearer') {
             return next(new Error('Unauthorized', { cause: 401 }));
         }
