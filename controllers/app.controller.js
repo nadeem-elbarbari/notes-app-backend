@@ -4,10 +4,10 @@ import noteRouter from './notes/notes.controller.js';
 import { connectDB } from '../db/connection.js';
 import { errorHandler } from '../middleware/error/errors.middleware.js';
 import { SESSION_SECRET, X_CALLBACK_URL, X_CLIENT_ID, X_CLIENT_SECRET } from '../config/env.js';
-import session from 'express-session';
 import passport from 'passport';
 import { Strategy as TwitterStrategy } from 'passport-twitter';
 import { xAuth } from '../middleware/auth/twitter.js';
+import session from 'express-session';
 
 export function appController(app, express) {
     app.use(express.json());
