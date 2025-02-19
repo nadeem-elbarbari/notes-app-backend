@@ -4,6 +4,7 @@ import noteRouter from './notes/notes.controller.js';
 import { connectDB } from '../db/connection.js';
 import { errorHandler } from '../middleware/error/errors.middleware.js';
 import { SESSION_SECRET, X_CALLBACK_URL, X_CLIENT_ID, X_CLIENT_SECRET } from '../config/env.js';
+import session from 'express-session';
 import passport from 'passport';
 import { Strategy as TwitterStrategy } from 'passport-twitter';
 import { xAuth } from '../middleware/auth/twitter.js';
@@ -15,6 +16,21 @@ export function appController(app, express) {
     app.get('/api/v1', (req, res) => {
         res.json({ msg: 'Hello World' });
     });
+
+    app.use(
+        session({
+            secret: SESSION_SECRET, // Secret to sign the session ID cookie
+            resave: false, // Don't resave the session if it's not modified
+            saveUninitialized: false, // Don't create a session if there's no data
+            cookie: {
+                httpOnly: true, // Makes the cookie inaccessible to JavaScript (important for security)
+                secure: process.env.NODE_ENV === 'production', // Set to `true` in production for HTTPS (encrypted cookie)
+                maxAge: 24 * 60 * 60 * 1000, // Set the cookie's expiration time (in milliseconds)
+                sameSite: 'strict', // Controls cross-site cookie behavior (important for CSRF protection)
+            },
+        })
+    );
+
 
     passport.use(
         new TwitterStrategy(
