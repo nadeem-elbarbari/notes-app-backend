@@ -393,7 +393,7 @@ button#x-login {
 }
 
 button#x-login:hover {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgb(41, 41, 41);
 }
 
 .auth-form button:hover {
