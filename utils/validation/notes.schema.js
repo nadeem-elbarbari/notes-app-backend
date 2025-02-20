@@ -16,7 +16,7 @@ export const createNoteSchema = Joi.object({
     }),
 });
 export const updateNoteSchema = Joi.object({
-    title: Joi.string().min(3).max(10).messages({
+    title: Joi.string().min(3).max(20).messages({
         'string.min': 'Title must be at least 3 characters long',
         'string.max': 'Title must be at most 20 characters long',
     }),

@@ -243,8 +243,8 @@ document.getElementById('updateButton').addEventListener('click', async () => {
         return;
     }
 
-    if (title.length > 10 || description.length > 100) {
-        showAlert('Title max 10 chars, description max 100 chars');
+    if (title.length > 20 || description.length > 100) {
+        showAlert('Title max 20 chars, description max 100 chars');
         return;
     }
 
