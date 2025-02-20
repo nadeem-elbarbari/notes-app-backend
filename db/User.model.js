@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: function () {
-            return this.source === Source.LOCAL ? true : false;
+            return this.source.name === Source.LOCAL ? true : false;
         },
     },
     source: {
