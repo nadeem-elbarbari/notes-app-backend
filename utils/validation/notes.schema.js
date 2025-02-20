@@ -5,7 +5,7 @@ const customValidation = (value, error) => {
     return isValid ? value : error.message(`invalid id: ${value}`);
 };
 export const createNoteSchema = Joi.object({
-    title: Joi.string().min(3).max(10).required().messages({
+    title: Joi.string().min(3).max(20).required().messages({
         'string.empty': 'Text is required',
         'string.min': 'Title must be at least 3 characters long',
         'string.max': 'Title must be at most 20 characters long',
