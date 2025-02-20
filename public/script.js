@@ -208,8 +208,8 @@ document.getElementById('crudForm').addEventListener('submit', async (e) => {
         showAlert('Title and description must be at least 3 characters long');
         return;
     }
-    if (title.length > 10 || description.length > 100) {
-        showAlert('Title max 10 chars, description max 100 chars');
+    if (title.length > 20 || description.length > 100) {
+        showAlert('Title max 20 chars, description max 100 chars');
         return;
     }
 
