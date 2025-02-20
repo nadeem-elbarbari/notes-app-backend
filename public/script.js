@@ -17,6 +17,12 @@ if ((localStorage.getItem('token') || token) && window.location.pathname === '/d
     $('#sidebar-home, #logoutButton').show();
 }
 
+const entriesContainer = document.getElementById('entries');
+const addButton = document.getElementById('addButton');
+const updateButton = document.getElementById('updateButton');
+const deleteButton = document.getElementById('deleteButton');
+const loader = '<i class="fa-solid fa-circle-notch fa-spin fa-xl"></i>';
+
 const req = async (endpoint, method, body = null) => {
     const url = 'https://notes-app-fullstack-wheat.vercel.app';
     try {
@@ -43,8 +49,6 @@ const checkToken = async () => {
     try {
         const response = await req('auth/checktoken', 'GET');
         const data = await response.json();
-        console.log('data :', data);
-
         $('#dashboard-title').text(`Welcome, ${data.data.name}`);
         return data.success;
     } catch (error) {
@@ -65,17 +69,17 @@ const validateToken = async () => {
     return isValid;
 };
 
-const entriesContainer = document.getElementById('entries');
-
 // Fetch and display notes
 const getNotes = async () => {
     try {
+        document.querySelector('.empty-notes').innerHTML = loader;
         const response = await req('notes', 'GET');
         const data = await response.json();
 
         if (data.success) {
             entriesContainer.innerHTML = ''; // Clear previous entries
             const notes = data.data;
+            document.querySelector('.empty-notes').innerHTML = '<p>No notes found</p>';
             document.querySelector('.empty-notes').style.display = notes.length === 0 ? 'block' : 'none';
 
             notes.forEach((note) => {
@@ -86,8 +90,8 @@ const getNotes = async () => {
                     <h3>${note.title}</h3>
                     <p>${note.description}</p>
                     <div class="actions">
-                        <button class="edit">Edit</button>
-                        <button class="delete">Delete</button>
+                        <button id="editButton" class="edit">Edit</button>
+                        <button id="deleteButton" class="delete">Delete</button>
                     </div>
                 `;
                 entriesContainer.appendChild(entryCard);
@@ -101,6 +105,7 @@ const getNotes = async () => {
 // Add a new note
 const addNote = async (title, description) => {
     try {
+        addButton.innerHTML = loader;
         const response = await req('notes/create', 'POST', { title, description });
         const data = await response.json();
         if (data.success) {
@@ -109,6 +114,8 @@ const addNote = async (title, description) => {
         }
     } catch (error) {
         console.error('Error adding note:', error);
+    } finally {
+        addButton.innerHTML = 'Add';
     }
 };
 
@@ -117,6 +124,7 @@ const updateNote = async (noteId, title, description) => {
     if (!(await validateToken())) return;
 
     try {
+        updateButton.innerHTML = loader;
         const response = await req(`notes/update/${noteId}`, 'PATCH', { title, description });
         const data = await response.json();
         if (data.success) {
@@ -127,6 +135,8 @@ const updateNote = async (noteId, title, description) => {
         }
     } catch (error) {
         console.error('Error updating note:', error);
+    } finally {
+        updateButton.innerHTML = 'Update';
     }
 };
 
@@ -137,8 +147,11 @@ const deleteNote = async (noteId) => {
     }
 
     try {
+        const deleteButton = document.querySelector(`.entry-card[data-id="${noteId}"] .delete`);
+        deleteButton.innerHTML = loader;
         const response = await req(`notes/delete/${noteId}`, 'DELETE');
         const data = await response.json();
+
         if (data.success) {
             await getNotes(); // Refresh list after deletion
             showToast('Note deleted successfully', 'success');
@@ -147,6 +160,9 @@ const deleteNote = async (noteId) => {
         }
     } catch (error) {
         console.error('Error deleting note:', error);
+    } finally {
+        const deleteButton = document.querySelector(`.entry-card[data-id="${noteId}"] .delete`);
+        if (deleteButton) deleteButton.innerHTML = 'Delete';
     }
 };
 
@@ -166,9 +182,19 @@ entriesContainer.addEventListener('click', async (e) => {
         document.getElementById('title').value = entryCard.querySelector('h3').textContent;
         document.getElementById('description').value = entryCard.querySelector('p').textContent;
         document.getElementById('updateButton').style.display = 'block';
+        document.getElementById('cancelButton').style.display = 'block';
         document.getElementById('addButton').style.display = 'none';
         editNoteId = noteId;
     }
+});
+
+// Handle cancel button click
+document.getElementById('cancelButton').addEventListener('click', () => {
+    document.getElementById('addButton').style.display = 'block';
+    document.getElementById('updateButton').style.display = 'none';
+    document.getElementById('cancelButton').style.display = 'none';
+    document.getElementById('crudForm').reset();
+    editNoteId = null;
 });
 
 // Handle form submission for adding/updating notes
@@ -198,6 +224,7 @@ document.getElementById('crudForm').addEventListener('submit', async (e) => {
 
     document.getElementById('addButton').style.display = 'block';
     document.getElementById('updateButton').style.display = 'none';
+    document.getElementById('cancelButton').style.display = 'none';
     e.target.reset();
 });
 
@@ -227,6 +254,7 @@ document.getElementById('updateButton').addEventListener('click', async () => {
 
     document.getElementById('addButton').style.display = 'block';
     document.getElementById('updateButton').style.display = 'none';
+    document.getElementById('cancelButton').style.display = 'none';
     document.getElementById('crudForm').reset();
     editNoteId = null; // Reset after update
 });

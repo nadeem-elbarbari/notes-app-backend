@@ -19,19 +19,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // Fade-in animation for auth container
     $('.auth-container').css({ opacity: '0' }).animate({ opacity: '1', marginTop: '0' }, 1000);
 
+    const loginButton = document.getElementById('loginButton');
+    const loader = document.createElement('i');
+    loader.className = 'fa-solid fa-circle-notch fa-spin fa-xl';
+
+
     // Handle login form submission
     $('.auth-form').submit(async (e) => {
         e.preventDefault();
-
+        
         const email = $('#email').val().trim();
         const password = $('#password').val().trim();
-
+        
         if (!email || !password) {
             showToast('Email and password are required.', 'error');
             return;
         }
-
         try {
+            // Disable the button
+            loginButton.disabled = true;
+
+            // Show the loader
+            loginButton.textContent = '';            
+            loginButton.appendChild(loader);
+            
             const response = await fetch('https://notes-app-fullstack-wheat.vercel.app/api/v1/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -39,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const data = await response.json();
+            // Re-enable the button
+            $('#loginButton').attr('disabled', false).text('Login');
+
             if (!data.success) return showToast(data.message, 'error');
 
             localStorage.setItem('token', data.data.token);

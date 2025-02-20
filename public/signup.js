@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#sidebar-home, #sidebar-register, #sidebar-login').toggle(!isAuthenticated);
     $('#sidebar-dashboard, #logoutButton').toggle(isAuthenticated);
 
+    const loginButton = document.getElementById('signup-button');
+    const loader = document.createElement('i');
+    loader.className = 'fa-solid fa-circle-notch fa-spin fa-xl';
+
     // Sidebar toggle functionality
     $('#menuToggle').click(() => $('#sidebar').addClass('open'));
     $('#closeSidebar').click(() => $('#sidebar').removeClass('open'));
@@ -43,7 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const url = 'https://notes-app-fullstack-wheat.vercel.app';
+            loginButton.disabled = true;
+            loginButton.innerHTML = '';
+            loginButton.appendChild(loader);
+
+            const url = 'https://notes-app-fullstack-wheat.vercel.app/';
             const response = await fetch(`${url}/api/v1/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -51,6 +59,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const data = await response.json();
+            loginButton.disabled = false;
+            loginButton.innerHTML = 'Sign Up';
+
             if (!data.success) {
                 return showToast(data.message, 'error');
             }

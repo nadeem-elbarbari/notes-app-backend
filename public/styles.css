@@ -181,6 +181,15 @@ h1 {
     background-color: #0056b3;
 }
 
+#crudForm button#cancelButton {
+    background-color: #dc3545;
+    display: none;
+}
+
+#crudForm button#cancelButton:hover {
+    background-color: #a71d2a;
+}
+
 .entries-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -533,7 +542,6 @@ button#x-login:hover {
     text-align: center;
     margin-top: 20px;
     font-size: 20px;
-    display: none;
 }
 
 .toast-container {
@@ -581,4 +589,16 @@ button#x-login:hover {
         color: #0070f3;
         font-weight: bold;
     }
+}
+
+#loginButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+#loginButton:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
 }

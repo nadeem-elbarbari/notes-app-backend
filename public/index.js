@@ -58,7 +58,7 @@ $('#dashboard').click(async () => {
             headers: {
                 Authorization: `Bearer ${localStorage.getItem('token')}`,
             },
-        });
+        }); 
         const data = await response.json();
         if (!data.success) {
             localStorage.removeItem('token');

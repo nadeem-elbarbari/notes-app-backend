@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 import { hash } from '../utils/bcrypt.js';
-var Source;
-(function (Source) {
-    Source['LOCAL'] = 'local';
-    Source['GOOGLE'] = 'google';
-    Source['FACEBOOK'] = 'facebook';
-    Source['TWITTER'] = 'twitter';
-})(Source || (Source = {}));
+
+export const Source = {
+    LOCAL: 'local',
+    GOOGLE: 'google',
+    TWITTER: 'twitter',
+};  
+
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -38,7 +38,7 @@ const UserSchema = new mongoose.Schema({
     },
 });
 UserSchema.pre('save', function (next) {
-    if (this.source !== Source.LOCAL) {
+    if (this.source.name !== Source.LOCAL) {
         return next();
     }
     this.password = hash(this.password);
