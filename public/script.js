@@ -64,7 +64,7 @@ const validateToken = async () => {
 
     if (!isValid) {
         showAlert('Your session has expired. Please log in again');
-        // setTimeout(logOut, 3000);
+        setTimeout(logOut, 3000);
     }
     return isValid;
 };
